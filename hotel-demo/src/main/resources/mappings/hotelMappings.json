@@ -1,0 +1,51 @@
+{
+  "mappings": {
+    "properties": {
+      "id":{
+        "type": "keyword",
+        "index": false
+      },
+      "name":{
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "copy_to": "all"
+      },
+      "address":{
+        "type": "text",
+        "index": false
+      },
+      "price":{
+        "type": "integer"
+      },
+      "score":{
+        "type": "integer"
+      },
+      "brand":{
+        "type": "keyword",
+        "copy_to": "all"
+      },
+      "city":{
+        "type": "keyword",
+        "copy_to": "all"
+      },
+      "starName":{
+        "type": "keyword"
+      },
+      "business":{
+        "type": "keyword"
+      },
+      "location":{
+        "type": "geo_point",
+        "index": false
+      },
+      "pic":{
+        "type": "keyword",
+        "index": false
+      },
+      "all":{
+        "type": "text",
+        "analyzer": "ik_max_word"
+      }
+    }
+  }
+}
