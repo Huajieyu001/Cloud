@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/hotel")
@@ -30,5 +31,10 @@ public class HotelController {
     @PostMapping("/list")
     public PageResult search(@RequestBody RequestParams params){
         return iHotelService.search(params);
+    }
+
+    @PostMapping("/filters")
+    public Map<String, List<String>> filters(@RequestBody RequestParams params){
+        return iHotelService.filters(params);
     }
 }

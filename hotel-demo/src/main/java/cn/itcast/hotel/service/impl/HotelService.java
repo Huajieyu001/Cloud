@@ -21,6 +21,9 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +31,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class HotelService extends ServiceImpl<HotelMapper, Hotel> implements IHotelService {
@@ -40,12 +46,19 @@ public class HotelService extends ServiceImpl<HotelMapper, Hotel> implements IHo
     public PageResult search(RequestParams params) {
         SearchRequest request = new SearchRequest(HotelConfig.INDEX_NAME);
 
-        SearchResponse response = basicQuery(params, request);
+        basicQuery(params, request);
+
+        SearchResponse response = null;
+        try {
+            response = client.search(request, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return RestUtils.handleResponse(response, !StringUtils.isEmpty(params.getLocation()));
     }
 
-    private SearchResponse basicQuery(RequestParams params, SearchRequest request) {
+    private void basicQuery(RequestParams params, SearchRequest request) {
         BoolQueryBuilder builder = new BoolQueryBuilder();
         if (params.getKey() == null || params.getKey().isEmpty()) {
             builder.must(QueryBuilders.matchAllQuery());
@@ -93,12 +106,46 @@ public class HotelService extends ServiceImpl<HotelMapper, Hotel> implements IHo
         request.source()
                 .from((params.getPage() - 1) * params.getSize())
                 .size(params.getSize());
-        SearchResponse response = null;
-        try {
-            response = client.search(request, RequestOptions.DEFAULT);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return response;
+    }
+
+    @Override
+    public Map<String, List<String>> filters(RequestParams params) {
+        Map<String, List<String>> map = new HashMap<>();
+
+        String[] names = {"brand", "city", "starName"};
+
+        List<String> nameList = Arrays.asList(names);
+
+        SearchRequest request = new SearchRequest("hotel");
+
+        basicQuery(params, request);
+
+        // exec
+        nameList.forEach(e -> {
+            TermsAggregationBuilder builder = AggregationBuilders.terms(e + "Aggs").field(e).size(100);
+            request.source().aggregation(builder);
+        });
+
+        // analyze
+        nameList.forEach(e -> {
+            try {
+                SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+                List<String> list = RestUtils.handleResponseAggs(response, e + "Aggs");
+//                if("brand".equals(e)){
+//                    map.put("品牌", list);
+//                }
+//                else if("city".equals(e)){
+//                    map.put("城市", list);
+//                }
+//                else if("starName".equals(e)){
+//                    map.put("星级", list);
+//                }
+                map.put(e, list);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        return map;
     }
 }
