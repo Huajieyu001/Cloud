@@ -27,7 +27,7 @@ public class HotelListener {
         service.insertById(id);
     }
 
-    @RabbitListener(queues = {RabbitMqConstants.HOTEL_INSERT_QUEUE})
+    @RabbitListener(queues = {RabbitMqConstants.HOTEL_DELETE_QUEUE})
     public void deleteListener(Long id){
         service.deleteById(id);
     }

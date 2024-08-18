@@ -12,10 +12,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,5 +33,10 @@ public class HotelController {
     @PostMapping("/filters")
     public Map<String, List<String>> filters(@RequestBody RequestParams params){
         return iHotelService.filters(params);
+    }
+
+    @GetMapping("/suggestion")
+    public List<String> getSuggestion(@RequestParam("key") String key){
+        return iHotelService.getSuggestion(key);
     }
 }

@@ -12,4 +12,9 @@ public interface IHotelService extends IService<Hotel> {
     PageResult search(RequestParams params);
 
     Map<String, List<String>> filters(RequestParams params);
+
+    List<String> getSuggestion(String key);
+
+    void insertById(Long id);
+    void deleteById(Long id);
 }

@@ -14,6 +14,8 @@ import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
+import org.elasticsearch.search.suggest.Suggest;
+import org.elasticsearch.search.suggest.completion.CompletionSuggestion;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -85,5 +87,15 @@ public class RestUtils {
         });
 
         return list;
+    }
+
+    public static List<String> handleResponseSugg(SearchResponse response, String suggestionName){
+        Suggest suggest = response.getSuggest();
+        CompletionSuggestion suggestion = suggest.getSuggestion(suggestionName);
+        List<String> suggestionList = new ArrayList<>();
+        suggestion.getOptions().forEach(e -> {
+            suggestionList.add(e.getText().string());
+        });
+        return suggestionList;
     }
 }
