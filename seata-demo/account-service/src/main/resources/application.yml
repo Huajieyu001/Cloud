@@ -5,9 +5,9 @@ spring:
     name: account-service
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql:///seata_demo?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3305/seata_demo?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
     username: root
-    password: 123
+    password: qq331173500
   cloud:
     nacos:
       server-addr: localhost:8848
@@ -34,15 +34,16 @@ seata:
       username: nacos
       password: nacos
   tx-service-group: seata-demo # 事务组名称
-#  service:
-#    vgroup-mapping: # 事务组与cluster的映射关系
-#      seata-demo: SH
-  data-source-proxy-mode: AT
-  config:
-    type: nacos
-    nacos:
-      server-addr: 127.0.0.1:8848
-      username: nacos
-      password: nacos
-      group: SEATA_GROUP
-      data-id: client.properties
+  service:
+    vgroup-mapping: # 事务组与cluster的映射关系
+      seata-demo: SH
+  data-source-proxy-mode: XA
+#  data-source-proxy-mode: AT
+#  config:
+#    type: nacos
+#    nacos:
+#      server-addr: 127.0.0.1:8848
+#      username: nacos
+#      password: nacos
+#      group: SEATA_GROUP
+#      data-id: client.properties
