@@ -1,17 +1,29 @@
+server:
+  port: 9080
+
 logging:
   level:
     io.lettuce.core: debug
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS
 
+# 哨兵模式
+#spring:
+#  redis:
+#    sentinel:
+#      master: mymaster
+#      nodes:
+#        - 192.168.179.128:27001
+#        - 192.168.179.128:27002
+#        - 192.168.179.128:27003
+
 spring:
   redis:
-    sentinel:
-      master: mymaster
+    cluster:
       nodes:
-        - 192.168.179.128:27001
-        - 192.168.179.128:27002
-        - 192.168.179.128:27003
-
-server:
-  port: 9080
+        - 192.168.179.128:7001
+        - 192.168.179.128:7002
+        - 192.168.179.128:7003
+        - 192.168.179.128:8001
+        - 192.168.179.128:8002
+        - 192.168.179.128:8003
