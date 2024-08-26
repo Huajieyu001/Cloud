@@ -60,7 +60,7 @@ public class CaffeineTest {
     void testEvictByTime() throws InterruptedException {
         // 创建缓存对象
         Cache<String, String> cache = Caffeine.newBuilder()
-                .expireAfterWrite(Duration.ofSeconds(1)) // 设置缓存有效期为 10 秒
+                .expireAfterWrite(Duration.ofSeconds(1)) // 设置缓存有效期为 1 秒
                 .build();
         // 存数据
         cache.put("gf", "柳岩");
@@ -69,5 +69,22 @@ public class CaffeineTest {
         // 休眠一会儿
         Thread.sleep(1200L);
         System.out.println("gf: " + cache.getIfPresent("gf"));
+    }
+
+    @Test
+    void testCache(){
+        Cache<String, String> cache = Caffeine.newBuilder().build();
+
+        cache.put("name", "john");
+
+        String value0 = cache.getIfPresent("name");
+        System.out.println("value0 = " + value0);
+        System.out.println("-------------------------------------");
+
+        String value1 = cache.get("otherName", key -> {
+            return "null";
+        });
+
+        System.out.println("value1 = " + value1);
     }
 }
