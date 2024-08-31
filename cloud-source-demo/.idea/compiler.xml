@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="nacos-sys" />
+        <module name="nacos-client" />
+        <module name="nacos-common" />
+        <module name="user-service" />
+        <module name="nacos-auth" />
+        <module name="nacos-cmdb" />
+        <module name="nacos-example" />
+        <module name="nacos-consistency" />
+        <module name="nacos-naming" />
+        <module name="nacos-console" />
+        <module name="nacos-istio" />
+        <module name="nacos-core" />
+        <module name="nacos-address" />
+        <module name="nacos-config" />
+        <module name="nacos-api" />
+        <module name="nacos-test" />
+        <module name="order-service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="order-service" options="-parameters" />
+      <module name="user-service" options="-parameters" />
+    </option>
+  </component>
+</project>
